@@ -42,6 +42,32 @@ class PostScraper:
 
         return date_text
 
+    def find_posts(self, soup):
+        """
+        Find all posts from forum
+        """
+        try:
+            postlist = soup.find('div', {'id': 'postlist'})
+            if not postlist:
+                print("No postlist found")
+                return []
+
+            posts_ol = postlist.find('ol', {'id': 'posts'})
+            if not posts_ol:
+                print("No posts ol found")
+                return []
+
+            posts = posts_ol.find_all('li', class_='postbitlegacy')
+            print(f"Found {len(posts)} posts on this page")
+
+            if posts:
+                print("Posts Found")
+
+            return []
+        except Exception as e:
+            print(f"Error finding posts: {e}")
+            return []
+
 
 def main():
     """
