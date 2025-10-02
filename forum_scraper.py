@@ -151,6 +151,13 @@ class ForumScraper:
         except Exception as e:
             print(f"Error during scraping: {e}")
 
+    def close(self):
+        """
+        Close the webdriver
+        """
+        if self.driver:
+            self.driver.quit()
+
 
 def main():
 	"""
