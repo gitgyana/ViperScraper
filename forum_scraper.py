@@ -67,6 +67,23 @@ class ForumScraper:
             print(f"Error getting max page number: {e}")
             return 1
 
+    def extract_forum_info(self, soup):
+        """
+        Extract forum name and link
+        """
+        try:
+            pagetitle = soup.find('div', {'id': 'pagetitle'})
+            if pagetitle:
+                thread_title = pagetitle.find('span', class_='threadtitle')
+                if thread_title:
+                    forum_name = thread_title.find('a').get_text(strip=True)
+                    forum_link = thread_title.find('a').get('href', '')
+                    return forum_name, forum_link
+        except Exception as e:
+            print(f"Error extracting forum info: {e}")
+
+        return "Unknown Forum", ""
+
     def scrape_all_pages(self, base_url=None, start_page=1, max_pages=None):
         """
         Scrape all pages starting from start_page
