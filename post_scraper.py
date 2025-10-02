@@ -14,8 +14,8 @@ class PostScraper:
         self.forum_data = []
         self.img_hosts = ['pixhost.to', 'imgur.com', 'imageban.ru']
         self.file_hosts = ["rapidgator", "katfile", "subyshare", "mexa"] 
-        self.img_extn = ('.jpg', '.jpeg', '.png', '.gif')
-        self.vid_extn = ('.mp4', '.avi', '.mkv', '.zip', '.rar')
+        self.img_ext = ('.jpg', '.jpeg', '.png', '.gif')
+        self.vid_ext = ('.mp4', '.avi', '.mkv', '.zip', '.rar')
         self.forum_name = forum_name
         self.forum_link = forum_link
 
@@ -46,7 +46,7 @@ class PostScraper:
 
     def extract_post_data(self, post_li):
         """
-        Extract date and postlink from a post
+        Extract data and metadata from a post
         """
         try:
             post_data = {}
@@ -63,6 +63,53 @@ class PostScraper:
                 if post_counter:
                     post_data['postlink'] = post_counter.get('href', '')
 
+            # Extract title, images, and download links
+            bold_content = post_li.find('b')
+            if bold_content:
+                title_text = ''
+                for content in bold_content.contents:
+                    if isinstance(content, str) and content.strip():
+                        title_text = content.strip()
+                        break
+
+                post_data['title'] = title_text
+
+                post_data['img_srcs'] = []
+                post_data['img_files'] = []
+                post_data['downloadlinks'] = []
+
+                img_links = bold_content.find_all('a', target='_blank')
+
+                for link in img_links:
+                    href = link.get('href', '')
+                    img_tag = link.find('img')
+
+                    is_image_host = any(domain in href for domain in self.img_hosts)
+                    is_image_ext = href.endswith(self.img_ext)
+                    has_img_inside = img_tag is not None
+
+                    if is_image_host or is_image_ext or has_img_inside:
+                        post_data['img_srcs'].append(href)
+
+                        if img_tag:
+                            img_src = img_tag.get('src', '')
+                            if img_src:
+                                post_data['img_files'].append(img_src)
+
+                    is_file_host = any(host in href for host in self.file_hosts)
+                    is_video_ext = href.endswith(self.vid_ext)
+                    if is_file_host or is_video_ext:
+                        post_data['downloadlinks'].append(href)
+
+                if not post_data['img_srcs']:
+                    post_data.pop('img_srcs', None)
+                    
+                if not post_data['img_files']:
+                    post_data.pop('img_files', None)
+
+                if not post_data['downloadlinks']:
+                    post_data.pop('downloadlinks', None)
+                    
             return post_data
 
         except Exception as e:
