@@ -35,3 +35,14 @@ to {{ transform: translateX(-50%) translateY(0); opacity: 1; }}
 document.head.appendChild(style);
 
 document.body.appendChild(popup);
+
+setTimeout(function() {{
+    if (popup && popup.parentNode) {{
+        popup.style.animation = 'slideIn 0.5s ease-out reverse';
+        setTimeout(function() {{
+            if (popup && popup.parentNode) {{
+                popup.remove();
+            }}
+        }}, 500);
+    }}
+}}, 5000);
