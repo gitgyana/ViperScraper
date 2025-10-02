@@ -134,7 +134,17 @@ class ForumScraper:
             else:
                 max_page_num = max_pages
 
-            time.sleep(30)
+            current_page = max_page_num - 10
+
+            while current_page <= max_page_num:
+                page_url = f"{base_url}/page{current_page}"
+                page_data = self.scrape_page(page_url)
+                self.forum_data.extend(page_data)
+
+                print(f"Completed page {current_page}/{max_page_num}. Total posts collected: {len(self.forum_data)}")
+
+                current_page += 1
+                time.sleep(2)
 
             print(f"Scraping completed. Total posts collected: {len(self.forum_data)}")
 
