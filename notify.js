@@ -33,3 +33,5 @@ to {{ transform: translateX(-50%) translateY(0); opacity: 1; }}
     }}
 `;
 document.head.appendChild(style);
+
+document.body.appendChild(popup);
