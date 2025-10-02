@@ -67,7 +67,7 @@ class ForumScraper:
             print(f"Error getting max page number: {e}")
             return 1
 
-    def scrape_all_pages(self, base_url=None	, start_page=1, max_pages=None):
+    def scrape_all_pages(self, base_url=None, start_page=1, max_pages=None):
         """
         Scrape all pages starting from start_page
         """
@@ -83,6 +83,12 @@ class ForumScraper:
 
             page_source = self.driver.page_source
             soup = BeautifulSoup(page_source, 'html.parser')
+
+            if max_pages is None:
+                max_page_num = self.get_max_page_number(soup)
+                print(f"Detected maximum page number: {max_page_num}")
+            else:
+                max_page_num = max_pages
 
             time.sleep(30)
 
