@@ -29,7 +29,7 @@ class ForumScraper:
             self.popup_script = file.read().strip().replace("py__message__", message)
 
         try:
-            self.driver.execute_script(popup_script)
+            self.driver.execute_script(self.popup_script)
             time.sleep(1)
         except Exception as e:
             print(f"Could not show popup: {e}")
