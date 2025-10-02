@@ -1,3 +1,4 @@
+import re
 import time
 import requests
 from bs4 import BeautifulSoup
@@ -33,6 +34,38 @@ class ForumScraper:
             time.sleep(1)
         except Exception as e:
             print(f"Could not show popup: {e}")
+
+    def get_max_page_number(self, soup):
+        """
+        Extract maximum page number from pagination
+        """
+        try:
+            pagination = soup.find('div', {'id': 'pagination_top'})
+            if not pagination:
+                return 1
+
+            page_info = pagination.find('span').find('a', class_='popupctrl')
+            if page_info:
+                text = page_info.get_text(strip=True)
+                match = re.search(r'Page \d+ of (\d+)', text)
+                if match:
+                    return int(match.group(1))
+
+            # Alternative
+            page_links = pagination.find_all('a', href=re.compile(r'/page\d+'))
+            max_page = 1
+            for link in page_links:
+                href = link.get('href', '')
+                page_match = re.search(r'/page(\d+)', href)
+                if page_match:
+                    page_num = int(page_match.group(1))
+                    max_page = max(max_page, page_num)
+
+            return max_page
+
+        except Exception as e:
+            print(f"Error getting max page number: {e}")
+            return 1
 
     def scrape_all_pages(self, base_url=None	, start_page=1, max_pages=None):
         """
