@@ -84,6 +84,27 @@ class ForumScraper:
 
         return "Unknown Forum", ""
 
+    def scrape_page(self, url):
+        """
+        Scrape a single page
+        """
+        try:
+            print(f"Scraping page: {url}")
+            self.driver.get(url)
+
+            self.show_popup_notification("Going to process task")
+
+            self.wait.until(EC.presence_of_element_located((By.ID, "postlist")))
+
+            page_source = self.driver.page_source
+            soup = BeautifulSoup(page_source, 'html.parser')
+
+            forum_name, forum_link = self.extract_forum_info(soup)
+            
+        except Exception as e:
+            print(f"Error scraping page {url}: {e}")
+            return []
+
     def scrape_all_pages(self, base_url=None, start_page=1, max_pages=None):
         """
         Scrape all pages starting from start_page
