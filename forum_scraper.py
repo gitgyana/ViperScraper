@@ -24,9 +24,6 @@ def main():
     Executes the primary workflow of the program.
     """
 	scraper = ForumScraper()
-	# test
-	scraper.driver.get("https://www.google.com/")
-	time.sleep(20)
 
 
 if __name__ == "__main__":
