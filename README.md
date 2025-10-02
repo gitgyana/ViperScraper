@@ -1,0 +1,1 @@
+# Powerful forum web scraper using Selenium & BeautifulSoup, automating post extraction with smart pagination, popup notifications, and CSV output. Ideal for structured collection of dates, titles, images, and download links from news-style forums.
