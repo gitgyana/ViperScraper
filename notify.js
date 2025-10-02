@@ -1,11 +1,11 @@
 var existingPopup = document.getElementById('scraper-popup');
-if (existingPopup) {{
+if (existingPopup) {
     existingPopup.remove();
-}}
+}
 
 var popup = document.createElement('div');
 popup.id = 'scraper-popup';
-popup.innerHTML = '{py__message__}';
+popup.innerHTML = 'py__message__';
 popup.style.cssText = `
     position: fixed;
     top: 20px;
@@ -27,22 +27,22 @@ popup.style.cssText = `
 
 var style = document.createElement('style');
 style.textContent = `
-    @keyframes slideIn {{
-from {{ transform: translateX(-50%) translateY(-50px); opacity: 0; }}
-to {{ transform: translateX(-50%) translateY(0); opacity: 1; }}
-    }}
+    @keyframes slideIn {
+        from { transform: translateX(-50%) translateY(-50px); opacity: 0; }
+        to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
 `;
 document.head.appendChild(style);
 
 document.body.appendChild(popup);
 
-setTimeout(function() {{
-    if (popup && popup.parentNode) {{
+setTimeout(function() {
+    if (popup && popup.parentNode) {
         popup.style.animation = 'slideIn 0.5s ease-out reverse';
-        setTimeout(function() {{
-            if (popup && popup.parentNode) {{
+        setTimeout(function() {
+            if (popup && popup.parentNode) {
                 popup.remove();
-            }}
-        }}, 500);
-    }}
-}}, 5000);
+            }
+        }, 500);
+    }
+}, 5000);
