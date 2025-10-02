@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 
 import driver_config
+from post_scraper import PostScraper
 
 
 globals().update(driver_config.libs)
@@ -101,6 +102,11 @@ class ForumScraper:
 
             forum_name, forum_link = self.extract_forum_info(soup)
             
+            post_scraper = PostScraper(forum_name, forum_link)
+            page_data = post_scraper.find_posts(soup)
+
+            return page_data
+
         except Exception as e:
             print(f"Error scraping page {url}: {e}")
             return []
