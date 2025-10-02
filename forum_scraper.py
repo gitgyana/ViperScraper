@@ -111,7 +111,7 @@ class ForumScraper:
             print(f"Error scraping page {url}: {e}")
             return []
 
-    def scrape_all_pages(self, base_url=None, start_page=1, max_pages=None):
+    def scrape_all_pages(self, base_url=None, start_page=1, max_pages=None, page_count=10):
         """
         Scrape all pages starting from start_page
         """
@@ -134,7 +134,7 @@ class ForumScraper:
             else:
                 max_page_num = max_pages
 
-            current_page = max_page_num - 10
+            current_page = max_page_num - page_count
 
             while current_page <= max_page_num:
                 page_url = f"{base_url}/page{current_page}"
@@ -160,11 +160,21 @@ class ForumScraper:
 
 
 def main():
-	"""
-	Main entry point of the script.
+    """
+    Main entry point of the script.
     Executes the primary workflow of the program.
     """
-	scraper = ForumScraper()
+    scraper = ForumScraper()
+
+    try:
+        base_url = input("Enter site \n > ")
+
+        scraper.scrape_all_pages(base_url=base_url, page_count=2)
+
+    except Exception as e:
+        print(f"Error in main: {e}")
+    finally:
+        scraper.close()
 
 
 if __name__ == "__main__":
