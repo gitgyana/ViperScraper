@@ -24,3 +24,12 @@ popup.style.cssText = `
     text-align: center;
     min-width: 300px;
 `;
+
+var style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {{
+from {{ transform: translateX(-50%) translateY(-50px); opacity: 0; }}
+to {{ transform: translateX(-50%) translateY(0); opacity: 1; }}
+    }}
+`;
+document.head.appendChild(style);
