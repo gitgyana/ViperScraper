@@ -103,7 +103,7 @@ class PostScraper:
 
                 if not post_data['img_srcs']:
                     post_data.pop('img_srcs', None)
-                    
+
                 if not post_data['img_files']:
                     post_data.pop('img_files', None)
 
@@ -131,7 +131,11 @@ class PostScraper:
                 print("No posts ol found")
                 return []
 
-            posts = posts_ol.find_all('li', class_='postbitlegacy')
+            posts = [
+                li for li in posts_ol.find_all('li', class_='postbitlegacy')
+                if not (li.get('id', '').startswith('post_thanks_box_'))
+            ]
+
             print(f"Found {len(posts)} posts on this page")
 
             page_data = []
