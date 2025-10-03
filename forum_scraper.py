@@ -6,7 +6,7 @@ from urllib.parse import urljoin, urlparse
 
 import driver_config
 from post_scraper import PostScraper
-
+from data_exporter import DataExporter
 
 globals().update(driver_config.libs)
 
@@ -171,6 +171,9 @@ def main():
 
         scraper.scrape_all_pages(base_url=base_url, page_count=2)
 
+        saver = DataExporter(filename='scraped_forum')
+        saver.save(scraper.forum_data)
+        
     except Exception as e:
         print(f"Error in main: {e}")
     finally:
