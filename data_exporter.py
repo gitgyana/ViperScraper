@@ -136,10 +136,13 @@ class DataExporter:
             if conn:
                 conn.close()
 
-    def save(self, data):
+    def save(self, data, mode=None):
         """
         Save the given data in the selected format(s)
         """
+        if not mode:
+            self.mode = mode
+            
         if self.mode in ['csv', '*']:
             self.extn = '.csv'
             self._save_to_csv(data)
