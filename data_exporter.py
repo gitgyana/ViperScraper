@@ -12,7 +12,7 @@ class DataExporter:
     Handles exporting data to CSV, SQLite, or both based on the specified mode
     """
 
-    def __init__(self, mode='*', filename=f'data_{curr_dt}', dirname='ProcessedData', tablename=f'data_{curr_dt}'):
+    def __init__(self, mode='*', filename=f'data_{curr_dt}', dirname='ProcessedData', tablename=None):
         """
         Initialize export mode and filename, defaulting to CSV and timestamped name
         """
@@ -20,6 +20,9 @@ class DataExporter:
         self.filename = filename
         self.tablename = tablename
         self.extn = ''
+
+        if not tablename:
+            self.tablename = filename
 
         if self.mode not in ['csv', 'sqlite3', 'sqlite', 'db', '*']:
             self.mode = '*'
@@ -140,9 +143,9 @@ class DataExporter:
         """
         Save the given data in the selected format(s)
         """
-        if not mode:
-            self.mode = mode
-            
+        if mode not in ['csv', 'sqlite3', 'sqlite', 'db', '*']:
+            self.mode = '*'
+
         if self.mode in ['csv', '*']:
             self.extn = '.csv'
             self._save_to_csv(data)
