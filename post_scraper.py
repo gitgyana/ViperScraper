@@ -7,7 +7,7 @@ class PostScraper:
     Scrapes post data including images and download links from a forum
     """
 
-    def __init__(self, forum_name, forum_link):
+    def __init__(self, forum_name=None, forum_link=None):
         """
         Initialize host filters and data structures
         """
@@ -151,8 +151,12 @@ class PostScraper:
             for post in posts:
                 post_data = self.extract_post_data(post)
                 if post_data:
-                    post_data['forum_name'] = self.forum_name
-                    post_data['forum_link'] = self.forum_link
+                    if self.forum_name:
+                        post_data['forum_name'] = self.forum_name
+
+                    if self.forum_link:
+                        post_data['forum_link'] = self.forum_link
+
                     page_data.append(post_data)
 
             return page_data
