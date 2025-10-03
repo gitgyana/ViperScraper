@@ -1,2 +1,6 @@
 __pycache__
 micro_test_script.py
+*.sqlite
+*.sqlite3
+*.db
+*.csv
