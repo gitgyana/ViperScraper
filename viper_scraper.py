@@ -1,4 +1,5 @@
 import driver_config
+from site_list import urls
 from forum_scraper import ForumScraper
 from data_exporter import DataExporter
 
@@ -16,12 +17,13 @@ def main():
     scraper = ForumScraper(driver, wait)
 
     try:
-        base_url = input("Enter site \n > ")
+        for base_url in urls:
+            scraper.scrape_all_pages(base_url=base_url, page_count=1)
 
-        scraper.scrape_all_pages(base_url=base_url, page_count=1)
+            saver = DataExporter(filename='scraped_forum')
+            saver.save(scraper.forum_data)
 
-        saver = DataExporter(filename='scraped_forum')
-        saver.save(scraper.forum_data)
+            scraper.forum_data = []
         
     except Exception as e:
         print(f"Error in main: {e}")
