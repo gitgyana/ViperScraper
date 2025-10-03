@@ -116,7 +116,8 @@ class DataExporter:
                 tablename = 'data_' + tablename
             
             column_definitions = ', '.join([f'`{field}` TEXT' for field in fieldnames])
-            create_table_query = f'CREATE TABLE IF NOT EXISTS `{tablename}` ({column_definitions})'
+            unique_constraint = f', UNIQUE ({", ".join([f"`{field}`" for field in fieldnames])})'
+            create_table_query = f'CREATE TABLE IF NOT EXISTS `{tablename}` ({column_definitions}{unique_constraint})'
             cursor.execute(create_table_query)
             
             if isinstance(data, dict):
@@ -134,7 +135,7 @@ class DataExporter:
                 
                 column_names = ', '.join([f'`{field}`' for field in fieldnames])
                 placeholders = ', '.join(['?' for _ in fieldnames])
-                insert_query = f'INSERT INTO `{tablename}` ({column_names}) VALUES ({placeholders})'
+                insert_query = f'INSERT OR IGNORE INTO `{tablename}` ({column_names}) VALUES ({placeholders})'
                 
                 values = [record_copy.get(field, '') for field in fieldnames]
                 cursor.execute(insert_query, values)
