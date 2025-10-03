@@ -56,6 +56,12 @@ class DataExporter:
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
 
+            existing_rows = set()
+            with open(filepath, 'r', newline='', encoding='utf-8') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    existing_rows.add(tuple(row.items()))
+
             with open(filepath, 'a', newline='', encoding='utf-8') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 
@@ -71,6 +77,9 @@ class DataExporter:
                             post_copy[key] = '; '.join(str(item) for item in value)
                         else:
                             post_copy[key] = str(value) if value is not None else ''
+
+                    if tuple(post_copy.items()) in existing_rows:
+                        continue
 
                     writer.writerow(post_copy)
 
