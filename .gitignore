@@ -4,3 +4,4 @@ micro_test_script.py
 *.sqlite3
 *.db
 *.csv
+ProcessedData
