@@ -12,21 +12,22 @@ class DataExporter:
     Handles exporting data to CSV, SQLite, or both based on the specified mode
     """
 
-    def __init__(self, mode='csv', filename=f'data_{curr_dt}', dirname='ProcessedData', tablename=f'data_{curr_dt}'):
+    def __init__(self, mode='*', filename=f'data_{curr_dt}', dirname='ProcessedData', tablename=f'data_{curr_dt}'):
         """
         Initialize export mode and filename, defaulting to CSV and timestamped name
         """
         self.mode = mode.lower()
         self.filename = filename
         self.tablename = tablename
+        self.extn = ''
 
-        if self.mode not in ['csv', 'sqlite3', 'sqlite', 'db']:
-            self.mode = 'csv'
+        if self.mode not in ['csv', 'sqlite3', 'sqlite', 'db', '*']:
+            self.mode = '*'
 
         if not dirname:
             dirname = 'ProcessedData'
 
-        self.filepath = os.path.join(dirname, f"{self.filename}.{self.mode}")
+        self.filepath = os.path.join(dirname, f"{self.filename}")
         os.makedirs(os.path.dirname(self.filepath), exist_ok=True)
 
     def _save_to_csv(self, data):
@@ -42,12 +43,17 @@ class DataExporter:
             else:
                 raise ValueError("Data must be a dict or a list/tuple with a dict as the first element")
 
-            if not os.path.isfile(self.filepath):
-                with open(self.filepath, 'w', newline='', encoding='utf-8') as csvfile:
+            if self.extn != '.csv':
+                self.extn = '.csv'
+
+            filepath = self.filepath + self.extn
+
+            if not os.path.isfile(filepath):
+                with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
 
-            with open(self.filepath, 'a', newline='', encoding='utf-8') as csvfile:
+            with open(filepath, 'a', newline='', encoding='utf-8') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 
                 if isinstance(data, dict):
@@ -65,7 +71,7 @@ class DataExporter:
 
                     writer.writerow(post_copy)
 
-            print(f"[CSV] Data saved: {self.filepath}")
+            print(f"[CSV] Data saved: {filepath}")
 
         except Exception as e:
             print(f"[CSV] Error saving: {e}")
@@ -84,7 +90,12 @@ class DataExporter:
             else:
                 raise ValueError("Data must be a dict or a list/tuple with a dict as the first element")
 
-            conn = sqlite3.connect(self.filepath)
+            if self.extn not in ['.sqlite3', '.sqlite', '.db']:
+                self.extn = '.db'
+
+            filepath = self.filepath + self.extn
+
+            conn = sqlite3.connect(filepath)
             cursor = conn.cursor()
             
             # Sanitize tablename
@@ -117,7 +128,7 @@ class DataExporter:
                 cursor.execute(insert_query, values)
             
             conn.commit()
-            print(f"[SQLite] Data saved: {self.filepath} (table: {tablename})")
+            print(f"[SQLite] Data saved: {filepath} (table: {tablename})")
             
         except Exception as e:
             print(f"[SQLite] Error saving: {e}")
@@ -125,3 +136,14 @@ class DataExporter:
             if conn:
                 conn.close()
 
+    def save(self, data):
+        """
+        Save the given data in the selected format(s)
+        """
+        if self.mode in ['csv', '*']:
+            self.extn = '.csv'
+            self._save_to_csv(data)
+
+        if self.mode in ['sqlite3', 'sqlite', 'db', '*']:
+            self.extn = '.db'
+            self._save_to_sqlite(data)
