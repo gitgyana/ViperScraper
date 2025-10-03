@@ -26,6 +26,15 @@ class PostScraper:
         try:
             date_text = re.sub(r'\s+', ' ', date_text.strip())
             
+            # Handle "Today,HH:MM" and "Yesterday,HH:MM"
+            if 'Today' in date_text:
+                today = datetime.today()
+                return today.strftime('%Y.%m.%d')
+
+            if 'Yesterday' in date_text:
+                yesterday = datetime.today() - timedelta(days=1)
+                return yesterday.strftime('%Y.%m.%d')
+
             # Pattern: "30th September 2025"
             date_match = re.search(r'(\d{1,2}\w{0,2}\s+\w+\s+\d{4})', date_text)
             
