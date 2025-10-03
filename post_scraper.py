@@ -105,6 +105,8 @@ class PostScraper:
                     is_video_ext = href.endswith(self.vid_ext)
                     if is_file_host or is_video_ext:
                         post_data['downloadlinks'].append(href)
+
+                post_data['pid'] = datetime.now().strftime('%Y%m%d%H%M%S')
                     
             return post_data
 
