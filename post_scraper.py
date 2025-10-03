@@ -164,14 +164,3 @@ class PostScraper:
         except Exception as e:
             print(f"Error finding posts: {e}")
             return []
-
-
-def main():
-    """
-    Entry point for running the post scraper
-    """
-    scraper = PostScraper()
-
-
-if __name__ == "__main__":
-    main()

@@ -2,24 +2,35 @@ import re
 import time
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin, urlparse
 
-import driver_config
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from post_scraper import PostScraper
-from data_exporter import DataExporter
-
-globals().update(driver_config.libs)
 
 
 class ForumScraper:
-    """Scrapes data from a forum using Selenium."""
+    """
+    Scrapes data from a forum using Selenium
+    """
 
-    def __init__(self):
+    def __init__(self, driver=None, wait=None):
         """
         Initialize the ForumScraper instance.
         """
-        self.driver = driver_config.driver
-        self.wait = WebDriverWait(self.driver, 10)
+        if driver is None:
+            options = webdriver.ChromeOptions()
+            self.driver = webdriver.Chrome(options=options)
+        else:
+            self.driver = driver
+
+        if wait is None:
+            self.wait = WebDriverWait(self.driver, 10)
+        else:
+            self.wait = wait
+
         self.popup_script = ""
         self.forum_data = []
 
@@ -158,27 +169,3 @@ class ForumScraper:
         if self.driver:
             self.driver.quit()
 
-
-def main():
-    """
-    Main entry point of the script.
-    Executes the primary workflow of the program.
-    """
-    scraper = ForumScraper()
-
-    try:
-        base_url = input("Enter site \n > ")
-
-        scraper.scrape_all_pages(base_url=base_url, page_count=2)
-
-        saver = DataExporter(filename='scraped_forum')
-        saver.save(scraper.forum_data)
-        
-    except Exception as e:
-        print(f"Error in main: {e}")
-    finally:
-        scraper.close()
-
-
-if __name__ == "__main__":
-    main()
