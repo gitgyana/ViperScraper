@@ -73,21 +73,17 @@ class PostScraper:
                     post_data['postlink'] = post_counter.get('href', '')
 
             # Extract title, images, and download links
-            bold_content = post_li.find('b')
-            if bold_content:
-                title_text = ''
-                for content in bold_content.contents:
-                    if isinstance(content, str) and content.strip():
-                        title_text = content.strip()
-                        break
-
+            post_content = post_li.find('div', class_='postrow')
+            if post_content:
+                title_tag = post_content.find('h2', class_='title icon')
+                title_text = title_tag.get_text(strip=True) if title_tag else ''
                 post_data['title'] = title_text
 
                 post_data['img_srcs'] = []
                 post_data['img_files'] = []
                 post_data['downloadlinks'] = []
 
-                img_links = bold_content.find_all('a', target='_blank')
+                img_links = post_content.find_all('a', target='_blank')
 
                 for link in img_links:
                     href = link.get('href', '')
@@ -109,15 +105,6 @@ class PostScraper:
                     is_video_ext = href.endswith(self.vid_ext)
                     if is_file_host or is_video_ext:
                         post_data['downloadlinks'].append(href)
-
-                if not post_data['img_srcs']:
-                    post_data.pop('img_srcs', None)
-
-                if not post_data['img_files']:
-                    post_data.pop('img_files', None)
-
-                if not post_data['downloadlinks']:
-                    post_data.pop('downloadlinks', None)
                     
             return post_data
 
