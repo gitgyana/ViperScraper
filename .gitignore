@@ -6,3 +6,5 @@ micro_test_script.py
 *.csv
 ProcessedData
 site_list.py
+log
+*.log
