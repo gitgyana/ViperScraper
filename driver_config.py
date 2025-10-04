@@ -10,6 +10,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from logger import log
+
 
 def detect_os_arch():
     """
@@ -122,12 +124,14 @@ def create_driver() -> webdriver.Chrome:
 
 disable_site_permissions = True
 os_arch = detect_os_arch()
-print(f"OS: {os_arch}")
+log("debug", f"OS: {os_arch}")
+
 time.sleep(2)
 headless = ask_headless()
 chromedriver_path = build_chromedriver_path(os_arch, headless) if os_arch else None
 time.sleep(1.5)
-print(f"Chrome Driver: {chromedriver_path}")
+log("debug", f"Chrome Driver: {chromedriver_path}")
+
 time.sleep(2)
 disable_js = ask_disable_js()
 

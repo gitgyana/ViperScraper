@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from post_scraper import PostScraper
+from logger import log
 
 
 class ForumScraper:
@@ -45,7 +46,7 @@ class ForumScraper:
             self.driver.execute_script(self.popup_script)
             time.sleep(1)
         except Exception as e:
-            print(f"Could not show popup: {e}")
+            log("warning", f"Could not show popup: {e}")
 
     def get_max_page_number(self, soup):
         """
@@ -76,7 +77,7 @@ class ForumScraper:
             return max_page
 
         except Exception as e:
-            print(f"Error getting max page number: {e}")
+            log("error", f"Error getting max page number: {e}")
             return 1
 
     def extract_forum_info(self, soup):
@@ -92,7 +93,7 @@ class ForumScraper:
                     forum_link = thread_title.find('a').get('href', '')
                     return forum_name, forum_link
         except Exception as e:
-            print(f"Error extracting forum info: {e}")
+            log("error", f"Error extracting forum info: {e}")
 
         return "Unknown Forum", ""
 
@@ -101,7 +102,7 @@ class ForumScraper:
         Scrape a single page
         """
         try:
-            print(f"Scraping page: {url}")
+            log("info", f"Scraping page: {url}")
             self.driver.get(url)
 
             self.show_popup_notification("Going to process task")
@@ -119,7 +120,7 @@ class ForumScraper:
             return page_data
 
         except Exception as e:
-            print(f"Error scraping page {url}: {e}")
+            log("error", f"Error scraping page {url}: {e}")
             return []
 
     def scrape_all_pages(self, base_url=None, start_page=1, max_pages=None, page_count=10):
@@ -141,7 +142,7 @@ class ForumScraper:
 
             if max_pages is None:
                 max_page_num = self.get_max_page_number(soup)
-                print(f"Detected maximum page number: {max_page_num}")
+                log("info", f"Detected maximum page number: {max_page_num}")
             else:
                 max_page_num = max_pages
 
@@ -152,15 +153,16 @@ class ForumScraper:
                 page_data = self.scrape_page(page_url)
                 self.forum_data.extend(page_data)
 
-                print(f"Completed page {current_page}/{max_page_num}. Total posts collected: {len(self.forum_data)}")
+                log("info", f"Completed page {current_page}/{max_page_num}. Total posts collected: {len(self.forum_data)}")
 
                 current_page += 1
                 time.sleep(2)
 
-            print(f"Scraping completed. Total posts collected: {len(self.forum_data)}")
+            log("info", f"Scraping completed. Total posts collected: {len(self.forum_data)}")
 
         except Exception as e:
-            print(f"Error during scraping: {e}")
+            log("error", f"Error during scraping: {e}")
+
 
     def close(self):
         """

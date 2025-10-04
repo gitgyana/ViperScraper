@@ -2,6 +2,7 @@ import driver_config
 from site_list import urls
 from forum_scraper import ForumScraper
 from data_exporter import DataExporter
+from logger import log
 
 
 globals().update(driver_config.libs)
@@ -26,7 +27,7 @@ def main():
             scraper.forum_data = []
         
     except Exception as e:
-        print(f"Error in main: {e}")
+        log("error", f"Error in main: {e}")
     finally:
         scraper.close()
 

@@ -1,6 +1,8 @@
 import re
 from datetime import datetime, timedelta
 
+from logger import log
+
 
 class PostScraper:
     """
@@ -49,7 +51,7 @@ class PostScraper:
                     return date_str
 
         except Exception as e:
-            print(f"Error parsing date: {e}")
+            log("error", f"Error parsing date: {e}")
 
         return date_text
 
@@ -109,7 +111,7 @@ class PostScraper:
             return post_data
 
         except Exception as e:
-            print(f"Error extracting post data: {e}")
+            log("error", f"Error extracting post data: {e}")
             return None
 
     def find_posts(self, soup):
@@ -119,12 +121,12 @@ class PostScraper:
         try:
             postlist = soup.find('div', {'id': 'postlist'})
             if not postlist:
-                print("No postlist found")
+                log("warning", "No postlist found")
                 return []
 
             posts_ol = postlist.find('ol', {'id': 'posts'})
             if not posts_ol:
-                print("No posts ol found")
+                log("warning", "No posts ol found")
                 return []
 
             posts = [
@@ -132,7 +134,7 @@ class PostScraper:
                 if not (li.get('id', '').startswith('post_thanks_box_'))
             ]
 
-            print(f"Found {len(posts)} posts on this page")
+            log("info", f"Found {len(posts)} posts on this page")
 
             page_data = []
             for post in posts:
@@ -149,5 +151,5 @@ class PostScraper:
             return page_data
 
         except Exception as e:
-            print(f"Error finding posts: {e}")
+            log("error", f"Error finding posts: {e}")
             return []

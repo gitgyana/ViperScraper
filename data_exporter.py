@@ -3,6 +3,7 @@ import csv
 import sqlite3
 from datetime import datetime
 
+from logger import log
 
 curr_dt = datetime.now().strftime('%Y.%m.%d_%H.%M.%S')
 
@@ -83,10 +84,10 @@ class DataExporter:
 
                     writer.writerow(post_copy)
 
-            print(f"[CSV] Data saved: {filepath}")
+            log("info", f"[CSV] Data saved: {filepath}")
 
         except Exception as e:
-            print(f"[CSV] Error saving: {e}")
+            log("error", f"[CSV] Error saving: {e}")
 
     def _save_to_sqlite(self, data):
         """
@@ -141,10 +142,10 @@ class DataExporter:
                 cursor.execute(insert_query, values)
             
             conn.commit()
-            print(f"[SQLite] Data saved: {filepath} (table: {tablename})")
+            log("info", f"[SQLite] Data saved: {filepath} (table: {tablename})")
             
         except Exception as e:
-            print(f"[SQLite] Error saving: {e}")
+            log("error", f"[SQLite] Error saving: {e}")
         finally:
             if conn:
                 conn.close()
