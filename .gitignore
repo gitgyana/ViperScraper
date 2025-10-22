@@ -8,3 +8,5 @@ ProcessedData
 site_list.py
 log
 *.log
+chromedrivers
+chromedrivers/
