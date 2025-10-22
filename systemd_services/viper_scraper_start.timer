@@ -1,0 +1,10 @@
+[Unit]
+Description=Start Viper Scraper Service at 6 AM and 6 PM
+
+[Timer]
+OnCalendar=*-*-* 06:00:00
+OnCalendar=*-*-* 18:00:00
+Unit=viper_scraper.service
+
+[Install]
+WantedBy=timers.target
