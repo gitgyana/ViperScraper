@@ -7,6 +7,10 @@ echo "Moving .service and .timer files to $DEST_DIR..."
 sudo mv $SOURCE_DIR/*.service $DEST_DIR/
 sudo mv $SOURCE_DIR/*.timer $DEST_DIR/
 
+echo "Make the start_viper.sh script executable"
+chmod +x start_viper.sh
+
+
 echo "Stop and disable existing viper services and timers"
 
 sudo systemctl stop viper_scraper.service
@@ -20,6 +24,7 @@ sudo systemctl disable viper_scraper_stop.timer
 
 echo "Reloading systemd daemon..."
 sudo systemctl daemon-reload
+sudo systemctl restart viper_scraper.service
 
 echo "Enabling and starting viper_scraper.service..."
 sudo systemctl enable viper_scraper.service
