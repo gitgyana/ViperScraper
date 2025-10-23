@@ -10,6 +10,8 @@ sudo cp $SOURCE_DIR/*.timer $DEST_DIR/
 echo "Make the start_viper.sh script executable"
 chmod +x start_viper.sh
 
+echo "Make script readable and executable by everyone"
+sudo chmod 755 start_viper.sh
 
 echo "Stop and disable existing viper services and timers"
 
