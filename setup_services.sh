@@ -3,9 +3,9 @@
 SOURCE_DIR="./systemd_services"
 DEST_DIR="/etc/systemd/system"
 
-echo "Moving .service and .timer files to $DEST_DIR..."
-sudo mv $SOURCE_DIR/*.service $DEST_DIR/
-sudo mv $SOURCE_DIR/*.timer $DEST_DIR/
+echo "Copy .service and .timer files to $DEST_DIR..."
+sudo cp $SOURCE_DIR/*.service $DEST_DIR/
+sudo cp $SOURCE_DIR/*.timer $DEST_DIR/
 
 echo "Make the start_viper.sh script executable"
 chmod +x start_viper.sh
