@@ -29,6 +29,6 @@ else
 fi
 
 echo "Running Viper scraper script..." >> "$LOG_FILE"
-python "$PROJECT_DIR/viper_scraper.py" >> "$LOG_FILE" 2>&1
+python "$PROJECT_DIR/viper_scraper.py"
 
-echo "Viper scraper script finished" >> "$LOG_FILE"
+echo "Viper scraper script finished"
