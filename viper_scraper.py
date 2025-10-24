@@ -23,7 +23,7 @@ def main():
             scraper = ForumScraper(driver, wait)
 
             
-            log("info", f"URL[{sl}]: {urls[sl]}")
+            log("info", f"URL[{sl} / {len(urls) - 1}]: {urls[sl]}")
             scraper.scrape_all_pages(base_url=urls[sl], page_count=10)
             
             saver = DataExporter(filename='scraped_forum')
@@ -35,8 +35,8 @@ def main():
             if sl >= len(urls):
                 sl = 0
 
-            scraper.close()
-            time.sleep(30)
+            driver.quit()
+            time.sleep(10)
 
     except Exception as e:
         log("error", f"Error in main: {e}")
