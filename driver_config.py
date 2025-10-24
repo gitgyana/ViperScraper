@@ -145,8 +145,6 @@ disable_js = ask_disable_js()
 if not os.path.isfile(chromedriver_path):
     raise FileNotFoundError(f"ChromeDriver not found at: {chromedriver_path}")
 
-driver = create_driver()
-
 libs = {
     "webdriver": webdriver,
     "Service": Service,
