@@ -81,12 +81,12 @@ def ask_disable_js(timeout=10):
     return result["disable_js"]
 
 
-def create_driver() -> webdriver.Chrome:
+def create_driver(disable_images=True) -> webdriver.Chrome:
     """
     Create and configure a Chrome WebDriver instance.
 
     This function sets up a Selenium Chrome WebDriver with options and preferences
-    defined. It allows enabling or disabling site permissions, JavaScript, and headless mode 
+    defined. It allows enabling or disabling site permissions, JavaScript, image loading, and headless mode 
     based on the ChromeDriver path.
 
     Returns a configured Chrome WebDriver instance ready for automation.
@@ -110,6 +110,9 @@ def create_driver() -> webdriver.Chrome:
 
     if disable_js:
         prefs["profile.managed_default_content_settings.javascript"] = 2
+
+    if disable_images:
+        prefs["profile.managed_default_content_settings.images"] = 2
 
     if prefs:
         options.add_experimental_option("prefs", prefs)
