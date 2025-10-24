@@ -1,13 +1,13 @@
 import time
 
-import driver_config
+import driver_config as config
 from site_list import urls
 from forum_scraper import ForumScraper
 from data_exporter import DataExporter
 from logger import log
 
 
-globals().update(driver_config.libs)
+globals().update(config.libs)
 
 
 def main():
@@ -17,7 +17,7 @@ def main():
     try:
         sl = 0
         while True:
-            driver = driver_config.driver
+            driver = config.create_driver()
             wait = WebDriverWait(driver, 10)
 
             scraper = ForumScraper(driver, wait)
@@ -26,8 +26,8 @@ def main():
             log("info", f"URL[{sl}]: {urls[sl]}")
             scraper.scrape_all_pages(base_url=urls[sl], page_count=10)
             
-            saver = DataExporter(filename='scraped_forum', mode='sqlite')
-            saver.save(data=scraper.forum_data, mode='sqlite')
+            saver = DataExporter(filename='scraped_forum')
+            saver.save(data=scraper.forum_data)
 
             scraper.forum_data = []
             
