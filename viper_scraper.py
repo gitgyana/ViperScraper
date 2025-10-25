@@ -15,8 +15,7 @@ def main():
     Executes the primary workflow of the program.
     """
     try:
-        sl = 0
-        while True:
+        for sl in range(0, len(urls)):
             driver = config.create_driver()
             wait = WebDriverWait(driver, 10)
 
@@ -31,10 +30,6 @@ def main():
 
             scraper.forum_data = []
             
-            sl += 1
-            if sl >= len(urls):
-                sl = 0
-
             driver.quit()
             time.sleep(10)
 
