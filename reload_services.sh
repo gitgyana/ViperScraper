@@ -11,9 +11,5 @@ echo "Enabling and starting viper_scraper_start.timer..."
 sudo systemctl enable viper_scraper_start.timer
 sudo systemctl start viper_scraper_start.timer
 
-echo "Enabling and starting viper_scraper_stop.timer..."
-sudo systemctl enable viper_scraper_stop.timer
-sudo systemctl start viper_scraper_stop.timer
-
 echo "Displaying logs for viper_scraper.service..."
 journalctl -u viper_scraper.service
