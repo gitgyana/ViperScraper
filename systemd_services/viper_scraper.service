@@ -3,16 +3,15 @@ Description=Start Viper Scraper Python Script in venv
 After=network.target
 
 [Service]
-Type=simple
+Type=oneshot
 ExecStart=/home/debian/Projects/ViperScraper/start_viper.sh
 WorkingDirectory=/home/debian/Projects/ViperScraper
 Environment="VIRTUAL_ENV=/home/debian/Projects/ViperScraper/scraperEnv"
 Environment="PATH=/home/debian/Projects/ViperScraper/scraperEnv/bin:$PATH"
+User=debian
+TimeoutSec=300
 StandardOutput=journal
 StandardError=journal
-Restart=on-failure
-User=debian
-TimeoutSec=60
 
 [Install]
 WantedBy=multi-user.target
