@@ -635,15 +635,12 @@ def main():
     """
     arch, headless, load_js, driverpath = driver_config()
 
-    try:
-        driver = create_driver(driverpath=driverpath, disable_js=load_js)
-        wait = WebDriverWait(driver, 10)
-        log("info", f"{driver}")
+    driver = create_driver(driverpath=driverpath, disable_js=load_js)
+    wait = WebDriverWait(driver, 10)
+    log("info", f"{driver}")
 
-        scraper = ForumScraper(driver, wait)
-    except Exception as e:
-        log("error", f"Error in main driver creation: {e}")
-            
+    scraper = ForumScraper(driver, wait)
+    
     try:
         for sl in range(0, len(urls)):
             log("info", f"URL[{sl} / {len(urls) - 1}]: {urls[sl]}")
