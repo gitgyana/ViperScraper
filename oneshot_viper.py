@@ -660,7 +660,7 @@ def main():
         try:
             driver.quit()
         except Exception as last_err:
-            log("error", f"Error in main driver quit: {e}")
+            log("error", f"Error in main driver quit: {last_err}")
             
         time.sleep(10)
 
