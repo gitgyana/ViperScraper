@@ -560,7 +560,7 @@ def ask_disable_js(arch, timeout=10):
     return result["disable_js"]
 
 
-def create_driver(driverpath, disable_js, disable_images=True) -> webdriver.Chrome:
+def create_driver(arch, driverpath, disable_js, disable_images=True) -> webdriver.Chrome:
     """
     Create and configure a Chrome WebDriver instance.
 
@@ -597,7 +597,7 @@ def create_driver(driverpath, disable_js, disable_images=True) -> webdriver.Chro
         options.add_experimental_option("prefs", prefs)
 
     if "chrome-headless-shell" in driverpath:
-        standard_driver_path = build_chromedriver_path(os_arch, headless=False)
+        standard_driver_path = build_chromedriver_path(arch, headless=False)
         options.binary_location = os.path.abspath(driverpath)
         service = Service(standard_driver_path)
     else:
@@ -635,7 +635,7 @@ def main():
     """
     arch, headless, load_js, driverpath = driver_config()
 
-    driver = create_driver(driverpath=driverpath, disable_js=load_js)
+    driver = create_driver(arch=arch, driverpath=driverpath, disable_js=load_js)
     wait = WebDriverWait(driver, 10)
     log("info", f"{driver}")
 
