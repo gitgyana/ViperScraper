@@ -28,7 +28,7 @@ def main():
             scraper.scrape_all_pages(base_url=urls[sl], page_count=10)
             
             saver = DataExporter(filename='scraped_forum')
-            saver.save(data=scraper.forum_data)
+            saver.save(data=scraper.forum_data, mode='sqlite')
 
             scraper.forum_data = []
             
