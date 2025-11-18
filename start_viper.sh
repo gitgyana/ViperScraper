@@ -10,7 +10,7 @@ source /home/debian/Projects/ViperScraper/scraperEnv/bin/activate
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') - Starting Viper Scraper..." >> "$LOG_FILE"
 
-python /home/debian/Projects/ViperScraper/oneshot_viper.py
+python /home/debian/Projects/ViperScraper/viper_scraper.py
 STATUS=$?
 
 if [ $STATUS -eq 0 ]; then
