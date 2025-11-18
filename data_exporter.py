@@ -154,7 +154,10 @@ class DataExporter:
         """
         Save the given data in the selected format(s)
         """
-        if mode not in ['csv', 'sqlite3', 'sqlite', 'db', '*']:
+        if mode:
+            self.mode = mode
+
+        if self.mode not in ['csv', 'sqlite3', 'sqlite', 'db', '*']:
             self.mode = '*'
 
         if self.mode in ['csv', '*']:
