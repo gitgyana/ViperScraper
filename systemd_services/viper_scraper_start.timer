@@ -1,11 +1,15 @@
 [Unit]
-Description=Start Viper Scraper Service at 12MidNight, 6 AM, 12Noon, and 6 PM
+Description=Start Viper Scraper Service every 3 hours
 
 [Timer]
 OnCalendar=*-*-* 00:00:00
+OnCalendar=*-*-* 03:00:00
 OnCalendar=*-*-* 06:00:00
+OnCalendar=*-*-* 09:00:00
 OnCalendar=*-*-* 12:00:00
+OnCalendar=*-*-* 15:00:00
 OnCalendar=*-*-* 18:00:00
+OnCalendar=*-*-* 21:00:00
 Unit=viper_scraper.service
 
 [Install]
