@@ -2,6 +2,7 @@ import re
 import time
 import requests
 from bs4 import BeautifulSoup
+from urllib.parse import urljoin, urlparse
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -32,6 +33,7 @@ class ForumScraper:
         else:
             self.wait = wait
 
+        self.domain_url = ""
         self.popup_script = ""
         self.forum_data = []
 
@@ -80,6 +82,13 @@ class ForumScraper:
             log("error", f"Error getting max page number: {e}")
             return 1
 
+    def resolve_url(self, thread_url):
+        if bool(urlparse(thread_url).netloc):
+            return thread_url
+        
+        return urljoin(self.domain_url, thread_url)
+            
+
     def extract_forum_info(self, soup):
         """
         Extract forum name and link
@@ -90,7 +99,9 @@ class ForumScraper:
                 thread_title = pagetitle.find('span', class_='threadtitle')
                 if thread_title:
                     forum_name = thread_title.find('a').get_text(strip=True)
-                    forum_link = thread_title.find('a').get('href', '')
+                    thread_link = thread_title.find('a').get('href', '')
+                    forum_link = self.resolve_url(thread_link)
+
                     return forum_name, forum_link
         except Exception as e:
             log("error", f"Error extracting forum info: {e}")
@@ -131,6 +142,9 @@ class ForumScraper:
         	base_url = input("Enter forum url \n > ")
 
         try:
+            parsed_url = urlparse(base_url)
+            self.domain_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+
             first_url = f"{base_url}/page{start_page}"
             self.driver.get(first_url)
 
