@@ -1,7 +1,6 @@
 import time
 
 import driver_config as config
-from site_list import urls
 from forum_scraper import ForumScraper
 from data_exporter import DataExporter
 from logger import log
@@ -14,7 +13,17 @@ def main():
     """
     Executes the primary workflow of the program.
     """
-    try:        
+    urls = []
+    file_path = "site_list.txt"
+    
+    try:
+        with open(file_path, 'r') as file:
+            urls = [line.strip() for line in file]
+
+    except Exception as file_err:
+        log("error", f"Error FILE TO LIST: {file_err}")
+
+    try:
         for sl in range(0, len(urls)):
             driver = None
             try:

@@ -15,7 +15,7 @@ chromedrivers/
 *.log
 
 micro_test_script.py
-site_list.py
+site_list.txt
 
 *Env
 *env
